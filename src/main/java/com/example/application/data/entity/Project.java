@@ -122,8 +122,8 @@ public class Project extends AbstractEntity {
     @OneToMany
     private Contact projektleiterStellvertreter;
 
-    private Date projektLaufzeitVon;
-    private Date getProjektLaufzeitBis;
+    private Date projektLaufzeitVon = new Date();
+    private Date getProjektLaufzeitBis = new Date();
 
     @OneToMany
     private Project uebergeordnetesProjekt;
@@ -154,11 +154,11 @@ public class Project extends AbstractEntity {
         this.projektLaufzeitVon = projektLaufzeitVon;
     }
 
-    public Date getGetProjektLaufzeitBis() {
+    public Date getProjektLaufzeitBis() {
         return getProjektLaufzeitBis;
     }
 
-    public void setGetProjektLaufzeitBis(Date getProjektLaufzeitBis) {
+    public void setProjektLaufzeitBis(Date getProjektLaufzeitBis) {
         this.getProjektLaufzeitBis = getProjektLaufzeitBis;
     }
 

@@ -11,6 +11,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class ContactFormTest {
+
     private List<Company> companies;
     private List<Status> statuses;
     private Contact marcUsher;
@@ -68,9 +69,7 @@ public class ContactFormTest {
         form.status.setValue(status2);
 
         AtomicReference<Contact> savedContactRef = new AtomicReference<>(null);
-        form.addListener(ContactForm.SaveEvent.class, e -> {
-            savedContactRef.set(e.getValue());
-        });
+        form.addListener(ContactForm.SaveEvent.class, e -> savedContactRef.set(e.getValue()));
         form.save.click();
         Contact savedContact = savedContactRef.get();
 

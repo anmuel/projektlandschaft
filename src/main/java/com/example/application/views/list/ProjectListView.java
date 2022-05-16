@@ -10,11 +10,11 @@ import com.vaadin.flow.router.Route;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-@Route(value = "", layout = MainLayout.class)
+@Route(value = "projects", layout = MainLayout.class)
 @PageTitle("Projects | Projektlandschaft")
 @Component
 @Scope("prototype")
-public class ProjectListView extends ListView {
+public class ProjectListView extends AbstractListView<Project> {
 
     protected String formName = "project";
 
@@ -27,7 +27,7 @@ public class ProjectListView extends ListView {
     transient CrmService crmService;
 
     public ProjectListView(CrmService crmService) {
-        super(crmService);
+        super(crmService, Project.class);
 
         addClassName("list-view");
         setSizeFull();
@@ -36,20 +36,24 @@ public class ProjectListView extends ListView {
         add(getToolbar(), getContent());
     }
 
-    private void configureGrid() {
-        grid.addClassNames("contact-grid");
-        grid.setSizeFull();
-        grid.setColumns("title", "description", "projektLaufzeitVon", "projektLaufzeitBis", "istAktiv");
-        grid.addColumn(project -> project.getAuftragGeber().getName()).setHeader("Auftraggeber");
-        grid.getColumns().forEach(column -> column.setAutoWidth(true));
-        grid.asSingleSelect().addValueChangeListener(event -> editProject(event.getValue()));
+    @Override
+    protected void updateList() {
+        grid.setItems(crmService.findAllProjects(filterText.getValue()));
     }
 
-    private void editProject(Project project) {
-        if (project == null) {
+    @Override
+    protected void configureForm() {
 
-        } else {
-            // TODO
-        }
+    }
+
+    protected void configureGrid() {
+        grid.addClassNames("contact-grid");
+        grid.setSizeFull();
+        grid.setColumns("title", "description", "istAktiv");
+        grid.addColumn(project -> project.getAuftragGeber().getName()).setHeader("Auftraggeber");
+        grid.addColumn(project -> project.getProjektLaufzeitVon().toString()).setHeader("Projektlaufzeit Von");
+        grid.addColumn(project -> project.getProjektLaufzeitBis().toString()).setHeader("Projektlaufzeit Bis");
+        grid.getColumns().forEach(column -> column.setAutoWidth(true));
+        grid.asSingleSelect().addValueChangeListener(event -> editValue(event.getValue()));
     }
 }

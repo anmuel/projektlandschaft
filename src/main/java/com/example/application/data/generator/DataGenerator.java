@@ -2,9 +2,11 @@ package com.example.application.data.generator;
 
 import com.example.application.data.entity.Company;
 import com.example.application.data.entity.Contact;
+import com.example.application.data.entity.Project;
 import com.example.application.data.entity.Status;
 import com.example.application.data.repository.CompanyRepository;
 import com.example.application.data.repository.ContactRepository;
+import com.example.application.data.repository.ProjectRepository;
 import com.example.application.data.repository.StatusRepository;
 import com.vaadin.exampledata.DataType;
 import com.vaadin.exampledata.ExampleDataGenerator;
@@ -24,7 +26,7 @@ public class DataGenerator {
 
     @Bean
     public CommandLineRunner loadData(ContactRepository contactRepository, CompanyRepository companyRepository,
-            StatusRepository statusRepository) {
+        StatusRepository statusRepository, ProjectRepository projectRepository) {
 
         return args -> {
             Logger logger = LoggerFactory.getLogger(getClass());
@@ -36,17 +38,17 @@ public class DataGenerator {
 
             logger.info("Generating demo data");
             ExampleDataGenerator<Company> companyGenerator = new ExampleDataGenerator<>(Company.class,
-                    LocalDateTime.now());
+                LocalDateTime.now());
             companyGenerator.setData(Company::setName, DataType.COMPANY_NAME);
             List<Company> companies = companyRepository.saveAll(companyGenerator.create(5, seed));
 
             List<Status> statuses = statusRepository
-                    .saveAll(Stream.of("Imported lead", "Not contacted", "Contacted", "Customer", "Closed (lost)")
-                            .map(Status::new).collect(Collectors.toList()));
+                .saveAll(Stream.of("Imported lead", "Not contacted", "Contacted", "Customer", "Closed (lost)")
+                    .map(Status::new).collect(Collectors.toList()));
 
             logger.info("... generating 50 Contact entities...");
             ExampleDataGenerator<Contact> contactGenerator = new ExampleDataGenerator<>(Contact.class,
-                    LocalDateTime.now());
+                LocalDateTime.now());
             contactGenerator.setData(Contact::setFirstName, DataType.FIRST_NAME);
             contactGenerator.setData(Contact::setLastName, DataType.LAST_NAME);
             contactGenerator.setData(Contact::setEmail, DataType.EMAIL);
@@ -59,6 +61,11 @@ public class DataGenerator {
             }).collect(Collectors.toList());
 
             contactRepository.saveAll(contacts);
+
+            ExampleDataGenerator<Project> projectGenerator = new ExampleDataGenerator<>(Project.class,
+                LocalDateTime.now());
+            projectGenerator.setData(Project::setTitle, DataType.BOOK_TITLE);
+            List<Project> projects = projectRepository.saveAll(projectGenerator.create(5, seed));
 
             logger.info("Generated demo data");
         };

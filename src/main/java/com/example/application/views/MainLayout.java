@@ -1,6 +1,7 @@
 package com.example.application.views;
 
 import com.example.application.views.list.ListView;
+import com.example.application.views.list.ProjectListView;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.html.H1;
@@ -36,12 +37,17 @@ public class MainLayout extends AppLayout {
     }
 
     private void createDrawer() {
-        RouterLink listLink = new RouterLink("List", ListView.class);
+        RouterLink listLink = new RouterLink("Kontakte", ListView.class);
+        RouterLink projectsLink = new RouterLink("Projekte", ProjectListView.class);
         listLink.setHighlightCondition(HighlightConditions.sameLocation());
+        projectsLink.setHighlightCondition(HighlightConditions.sameLocation());
+        RouterLink dashboardLink = new RouterLink("Dashboard", DashboardView.class);
+        dashboardLink.setHighlightCondition(HighlightConditions.sameLocation());
 
         addToDrawer(new VerticalLayout(
+            projectsLink,
             listLink,
-            new RouterLink("Dashboard", DashboardView.class)
+            dashboardLink
         ));
     }
 }
