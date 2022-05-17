@@ -24,7 +24,7 @@ import org.springframework.context.annotation.Bean;
 @SpringComponent
 public class DataGenerator {
 
-    @Bean
+    @Bean(name="entityManagerFactory")
     public CommandLineRunner loadData(ContactRepository contactRepository, CompanyRepository companyRepository,
         StatusRepository statusRepository, ProjectRepository projectRepository) {
 

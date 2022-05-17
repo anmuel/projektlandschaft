@@ -5,10 +5,13 @@ import com.example.application.data.AbstractEntity;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+
+import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotBlank;
 
+@Entity
 public class Project extends AbstractEntity {
 
     @NotBlank

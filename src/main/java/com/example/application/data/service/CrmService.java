@@ -9,15 +9,21 @@ import com.example.application.data.repository.ContactRepository;
 import com.example.application.data.repository.ProjectRepository;
 import com.example.application.data.repository.StatusRepository;
 import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
 @Service
 public class CrmService {
 
+    @Autowired
     private final ContactRepository contactRepository;
+    @Autowired
     private final CompanyRepository companyRepository;
+    @Autowired
     private final StatusRepository statusRepository;
+    @Autowired
     private final ProjectRepository projectRepository;
 
     public CrmService(ContactRepository contactRepository,
