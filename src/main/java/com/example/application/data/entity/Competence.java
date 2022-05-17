@@ -3,8 +3,11 @@ package com.example.application.data.entity;
 import com.example.application.data.AbstractEntity;
 import java.util.LinkedList;
 import java.util.List;
+
+import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 
+@Entity
 public class Competence extends AbstractEntity {
 
     @ManyToMany
