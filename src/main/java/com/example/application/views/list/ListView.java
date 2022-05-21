@@ -34,13 +34,13 @@ public class ListView extends AbstractListView<Contact> {
         form.addListener(ContactForm.CloseEvent.class, e -> closeEditor());
     }
 
-    private void saveContact(SaveEvent event) {
+    protected void saveContact(SaveEvent event) {
         crmService.saveContact(event.getValue());
-        updateList();
-        closeEditor();
+        afterValueInteraction();
     }
 
-    private void deleteContact(DeleteEvent event) {
+
+    protected void deleteContact(DeleteEvent event) {
         crmService.deleteContact(event.getValue());
         updateList();
         closeEditor();

@@ -3,10 +3,12 @@ package com.example.application.views.list;
 import com.example.application.data.entity.Project;
 import com.example.application.data.service.CrmService;
 import com.example.application.views.MainLayout;
-import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.textfield.TextField;
+import com.example.application.views.list.ProjectForm.DeleteEvent;
+import com.example.application.views.list.ProjectForm.SaveEvent;
+import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import java.util.Collections;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -16,24 +18,8 @@ import org.springframework.stereotype.Component;
 @Scope("prototype")
 public class ProjectListView extends AbstractListView<Project> {
 
-    protected String formName = "project";
-
-    Grid<Project> grid = new Grid<>(Project.class);
-
-    TextField filterText = new TextField();
-
-    ProjectForm form;
-
-    transient CrmService crmService;
-
     public ProjectListView(CrmService crmService) {
         super(crmService, Project.class);
-
-        addClassName("list-view");
-        setSizeFull();
-        configureGrid();
-
-        add(getToolbar(), getContent());
     }
 
     @Override
@@ -43,16 +29,30 @@ public class ProjectListView extends AbstractListView<Project> {
 
     @Override
     protected void configureForm() {
+        form = new ProjectForm(Collections.emptyList(), Collections.emptyList());
+        form.setWidth("25em");
+        form.addListener(ProjectForm.SaveEvent.class, this::saveProject);
+        form.addListener(ProjectForm.DeleteEvent.class, this::deleteProject);
+        form.addListener(ProjectForm.CloseEvent.class, e -> closeEditor());
+    }
 
+    private <E extends ComponentEvent<?>> void deleteProject(DeleteEvent e) {
+        crmService.deleteProject(e.getValue());
+        afterValueInteraction();
+    }
+
+    private <E extends ComponentEvent<?>> void saveProject(SaveEvent e) {
+        crmService.saveProject(e.getValue());
+        afterValueInteraction();
     }
 
     protected void configureGrid() {
         grid.addClassNames("contact-grid");
         grid.setSizeFull();
         grid.setColumns("title", "description", "istAktiv");
-        grid.addColumn(project -> project.getAuftragGeber().getName()).setHeader("Auftraggeber");
-        grid.addColumn(project -> project.getProjektLaufzeitVon().toString()).setHeader("Projektlaufzeit Von");
-        grid.addColumn(project -> project.getProjektLaufzeitBis().toString()).setHeader("Projektlaufzeit Bis");
+//        grid.addColumn(project -> project.getAuftragGeber().getName()).setHeader("Auftraggeber");
+//        grid.addColumn(project -> project.getProjektLaufzeitVon().toString()).setHeader("Projektlaufzeit Von");
+//        grid.addColumn(project -> project.getProjektLaufzeitBis().toString()).setHeader("Projektlaufzeit Bis");
         grid.getColumns().forEach(column -> column.setAutoWidth(true));
         grid.asSingleSelect().addValueChangeListener(event -> editValue(event.getValue()));
     }

@@ -69,4 +69,12 @@ public class CrmService {
             return projectRepository.search(filterTextValue);
         }
     }
+
+    public void saveProject(Project project) {
+        this.projectRepository.save(project);
+    }
+
+    public void deleteProject(Project project) {
+        this.projectRepository.delete(project);
+    }
 }

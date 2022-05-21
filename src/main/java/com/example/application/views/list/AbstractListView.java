@@ -1,7 +1,6 @@
 package com.example.application.views.list;
 
 import com.example.application.data.AbstractEntity;
-import com.example.application.data.entity.Contact;
 import com.example.application.data.service.CrmService;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
@@ -15,8 +14,8 @@ import org.springframework.lang.Nullable;
 
 public abstract class AbstractListView<T extends AbstractEntity> extends VerticalLayout {
 
-    transient CrmService crmService;
-    Grid<Contact> grid = new Grid<>(Contact.class);
+    protected transient CrmService crmService;
+    protected Grid<T> grid;
     TextField filterText = new TextField();
     protected AbstractForm<T> form;
 
@@ -26,6 +25,7 @@ public abstract class AbstractListView<T extends AbstractEntity> extends Vertica
         super();
         this.crmService = service;
         this.clazz = clazz;
+        this.grid = new Grid<>(clazz);
 
         addClassName("list-view");
 
@@ -34,6 +34,11 @@ public abstract class AbstractListView<T extends AbstractEntity> extends Vertica
         configureForm();
 
         add(getToolbar(), getContent());
+        updateList();
+        closeEditor();
+    }
+
+    protected void afterValueInteraction() {
         updateList();
         closeEditor();
     }
@@ -63,10 +68,10 @@ public abstract class AbstractListView<T extends AbstractEntity> extends Vertica
         filterText.setValueChangeMode(ValueChangeMode.LAZY);
         filterText.addValueChangeListener(e -> updateList());
 
-        Button addContactButton = new Button("Add " + this.clazz.getName());
-        addContactButton.addClickListener(click -> addValue());
+        Button addButton = new Button("Add " + this.clazz.getSimpleName());
+        addButton.addClickListener(click -> addValue());
 
-        HorizontalLayout toolbar = new HorizontalLayout(filterText, addContactButton);
+        HorizontalLayout toolbar = new HorizontalLayout(filterText, addButton);
         toolbar.addClassName("toolbar");
         return toolbar;
     }

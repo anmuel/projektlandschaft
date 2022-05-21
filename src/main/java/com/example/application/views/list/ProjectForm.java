@@ -15,15 +15,15 @@ public class ProjectForm extends AbstractForm<Project> {
 
     TextField description = new TextField("Kurzbeschreibung");
 
-    ComboBox<Contact> auftragGeber = new ComboBox<>("Auftraggeber");
+    ComboBox<Company> auftragGeber = new ComboBox<>("Auftraggeber");
 
-    private List<Contact> auftrageberItems;
+    private transient final List<Company> auftrageberItems;
 
 
     public ProjectForm(List<Company> companies, List<Contact> contacts) {
         super(Project.class);
 
-        this.auftrageberItems = contacts;
+        this.auftrageberItems = companies;
 
         populateItems();
 
