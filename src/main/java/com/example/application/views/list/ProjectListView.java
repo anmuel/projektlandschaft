@@ -38,7 +38,8 @@ public class ProjectListView extends AbstractListView<Project> {
         form = new ProjectForm(notificationService,
             crmService.findAllCompanies(),
             crmService.findAllContacts(null),
-            crmService.findMethodischeKompetenzen(null));
+            crmService.findMethodischeKompetenzen(null),
+            crmService.findAllProjects(null));
         form.setWidth("25em");
         form.addListener(ProjectForm.SaveEvent.class, this::saveProject);
         form.addListener(ProjectForm.DeleteEvent.class, this::deleteProject);
@@ -59,6 +60,7 @@ public class ProjectListView extends AbstractListView<Project> {
         afterValueInteraction();
     }
 
+    @Override
     protected void configureGrid() {
         grid.addClassNames("contact-grid");
         grid.setSizeFull();

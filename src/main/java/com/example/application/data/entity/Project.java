@@ -5,6 +5,7 @@ import com.example.application.data.AbstractEntity;
 import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
@@ -150,11 +151,11 @@ public class Project extends AbstractEntity {
         this.projektLeiter = projektLeiter;
     }
 
-    public Contact getProjektleiterStellvertreter() {
+    public @Nullable Contact getProjektleiterStellvertreter() {
         return projektleiterStellvertreter;
     }
 
-    public void setProjektleiterStellvertreter(Contact projektleiterStellvertreter) {
+    public void setProjektleiterStellvertreter(@Nullable Contact projektleiterStellvertreter) {
         this.projektleiterStellvertreter = projektleiterStellvertreter;
     }
 
@@ -162,7 +163,7 @@ public class Project extends AbstractEntity {
         return projektLaufzeitVon;
     }
 
-    public void setProjektLaufzeitVon(LocalDate projektLaufzeitVon) {
+    public void setProjektLaufzeitVon(@Nullable LocalDate projektLaufzeitVon) {
         this.projektLaufzeitVon = projektLaufzeitVon;
     }
 
@@ -200,4 +201,40 @@ public class Project extends AbstractEntity {
 
     @ManyToMany
     private List<Project> abhaengigeProjekte = new LinkedList<>();
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        if (!super.equals(o)) {
+            return false;
+        }
+        Project project = (Project) o;
+        return istAktiv == project.istAktiv && title.equals(project.title) && Objects.equals(description,
+            project.description) && Objects.equals(auftragGeber, project.auftragGeber)
+            && Objects.equals(auftragNehmer, project.auftragNehmer) && Objects.equals(
+            strategischesProjektziel, project.strategischesProjektziel) && Objects.equals(fachlichesThemengebiet,
+            project.fachlichesThemengebiet) && Objects.equals(fachlicheKompetenz, project.fachlicheKompetenz)
+            && Objects.equals(methodischeKompetenz, project.methodischeKompetenz) && Objects.equals(
+            technologischeKompetenz, project.technologischeKompetenz) && Objects.equals(kostenTraeger,
+            project.kostenTraeger) && projektLeiter.equals(project.projektLeiter) && Objects.equals(
+            projektleiterStellvertreter, project.projektleiterStellvertreter) && Objects.equals(
+            projektLaufzeitVon, project.projektLaufzeitVon) && Objects.equals(getProjektLaufzeitBis,
+            project.getProjektLaufzeitBis) && Objects.equals(uebergeordnetesProjekt,
+            project.uebergeordnetesProjekt) && Objects.equals(untergeordneteProjekte,
+            project.untergeordneteProjekte) && Objects.equals(abhaengigeProjekte, project.abhaengigeProjekte);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), title, description, auftragGeber, auftragNehmer, strategischesProjektziel,
+            fachlichesThemengebiet, fachlicheKompetenz, methodischeKompetenz, technologischeKompetenz, kostenTraeger,
+            projektLeiter, projektleiterStellvertreter, projektLaufzeitVon, getProjektLaufzeitBis,
+            uebergeordnetesProjekt,
+            untergeordneteProjekte, istAktiv, abhaengigeProjekte);
+    }
 }

@@ -25,6 +25,8 @@ import java.util.Set;
 
 public class ProjectForm extends AbstractForm<Project> {
 
+    private final transient List<Project> projects;
+
     @Override
     void onClose(ClickEvent<Button> event) {
         fireEvent(new CloseEvent(this));
@@ -46,21 +48,25 @@ public class ProjectForm extends AbstractForm<Project> {
     TextField fachlichesThemengebiet = new TextField("Fachliches Themengebiet");
     CheckboxGroup<MethodischeKompetenz> methodischeKompetenz = new CheckboxGroup<>();
 
+    ComboBox<Project> uebergeordnetesProject = new ComboBox<>("Übergeordnetes Projekt");
+
     private final transient List<Company> auftrageberItems;
     private final transient List<Contact> contacts;
 
 
     public ProjectForm(NotificationService notificationService, List<Company> companies, List<Contact> contacts,
-        List<MethodischeKompetenz> methodischeKompetenzen) {
+        List<MethodischeKompetenz> methodischeKompetenzen, List<Project> projects) {
         super(Project.class, notificationService);
 
         this.auftrageberItems = companies;
         this.contacts = contacts;
         this.methodischeKompetenzItems = methodischeKompetenzen;
+        this.projects = projects;
 
         populateItems();
 
-        add(title, istAktiv, description, auftragGeber, projectLeiter, stlvProjektleiter, strategischesProjektziel,
+        add(title, istAktiv, uebergeordnetesProject, description, auftragGeber, projectLeiter, stlvProjektleiter,
+            strategischesProjektziel,
             fachlichesThemengebiet, methodischeKompetenz, createButtonsLayout());
 
         this.initBinder();
@@ -111,6 +117,9 @@ public class ProjectForm extends AbstractForm<Project> {
             (MultiSelectionListener<CheckboxGroup<MethodischeKompetenz>, MethodischeKompetenz>) event -> getValue().setMethodischeKompetenz(
                 new LinkedList<>(event.getValue())));
         methodischeKompetenz.addThemeVariants(CheckboxGroupVariant.LUMO_HELPER_ABOVE_FIELD);
+
+        uebergeordnetesProject.setItems((ItemFilter<Project>) (project, filterText) -> !project.equals(getValue()), projects);
+        uebergeordnetesProject.setItemLabelGenerator((ItemLabelGenerator<Project>) Project::getTitle);
     }
 
     public static class SaveEvent extends AbstractForm.SaveEvent<Project> {
