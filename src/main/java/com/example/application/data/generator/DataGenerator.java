@@ -54,18 +54,26 @@ public class DataGenerator {
             contactGenerator.setData(Contact::setEmail, DataType.EMAIL);
 
             Random r = new Random(seed);
-            List<Contact> contacts = contactGenerator.create(50, seed).stream().map(contact -> {
+            List<Contact> contacts = contactGenerator.create(50, seed).stream().peek(contact -> {
                 contact.setCompany(companies.get(r.nextInt(companies.size())));
                 contact.setStatus(statuses.get(r.nextInt(statuses.size())));
-                return contact;
             }).collect(Collectors.toList());
 
             contactRepository.saveAll(contacts);
 
+            logger.info("... generating 10 Project entities ...");
             ExampleDataGenerator<Project> projectGenerator = new ExampleDataGenerator<>(Project.class,
                 LocalDateTime.now());
             projectGenerator.setData(Project::setTitle, DataType.BOOK_TITLE);
-            List<Project> projects = projectRepository.saveAll(projectGenerator.create(5, seed));
+            projectGenerator.setData(Project::setDescription, DataType.SENTENCE);
+            projectGenerator.setData(Project::setIstAktiv, DataType.BOOLEAN_50_50);
+            projectGenerator.setData(Project::setProjektLaufzeitBis, DataType.DATE_NEXT_10_YEARS);
+            List<Project> projects = projectGenerator.create(10, seed).stream().peek(project -> {
+                project.setAuftragGeber(companies.get(r.nextInt(companies.size())));
+                project.setProjektLeiter(contacts.get(r.nextInt(contacts.size())));
+            }).collect(Collectors.toList());
+
+            projectRepository.saveAll(projects);
 
             logger.info("Generated demo data");
         };

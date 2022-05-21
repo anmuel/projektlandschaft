@@ -4,6 +4,7 @@ import com.example.application.data.entity.Company;
 import com.example.application.data.entity.Contact;
 import com.example.application.data.entity.Project;
 import com.vaadin.flow.component.ClickEvent;
+import com.vaadin.flow.component.ItemLabelGenerator;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.textfield.TextField;
@@ -17,7 +18,7 @@ public class ProjectForm extends AbstractForm<Project> {
 
     ComboBox<Company> auftragGeber = new ComboBox<>("Auftraggeber");
 
-    private transient final List<Company> auftrageberItems;
+    private final transient List<Company> auftrageberItems;
 
 
     public ProjectForm(List<Company> companies, List<Contact> contacts) {
@@ -44,6 +45,7 @@ public class ProjectForm extends AbstractForm<Project> {
     @Override
     protected void populateItems() {
         auftragGeber.setItems(this.auftrageberItems);
+        auftragGeber.setItemLabelGenerator((ItemLabelGenerator<Company>) Company::getName);
     }
 
     public static class SaveEvent extends AbstractForm.SaveEvent<Project> {

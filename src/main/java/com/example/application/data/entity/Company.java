@@ -1,6 +1,7 @@
 package com.example.application.data.entity;
 
 import com.example.application.data.AbstractEntity;
+import com.example.application.views.list.Nameable;
 import java.util.LinkedList;
 import java.util.List;
 import javax.persistence.Entity;
@@ -9,7 +10,7 @@ import javax.validation.constraints.NotBlank;
 import org.hibernate.annotations.Formula;
 
 @Entity
-public class Company extends AbstractEntity {
+public class Company extends AbstractEntity implements Nameable {
     @NotBlank
     private String name;
 

@@ -2,7 +2,7 @@ package com.example.application.data.entity;
 
 
 import com.example.application.data.AbstractEntity;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
 import javax.persistence.Entity;
@@ -11,6 +11,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotBlank;
+import org.springframework.lang.Nullable;
 
 @Entity()
 public class Project extends AbstractEntity {
@@ -34,7 +35,7 @@ public class Project extends AbstractEntity {
         this.description = description;
     }
 
-    public Company getAuftragGeber() {
+    public @Nullable Company getAuftragGeber() {
         return auftragGeber;
     }
 
@@ -111,10 +112,10 @@ public class Project extends AbstractEntity {
 
     private String fachlichesThemengebiet;
 
-    @ManyToMany(mappedBy="projects")
+    @ManyToMany(mappedBy = "projects")
     private List<FachlicheKompetenz> fachlicheKompetenz = new LinkedList<>();
 
-    @ManyToMany(mappedBy="projects", fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "projects", fetch = FetchType.LAZY)
     private List<MethodischeKompetenz> methodischeKompetenz = new LinkedList<>();
 
     @ManyToMany(mappedBy = "projects", fetch = FetchType.LAZY)
@@ -125,10 +126,13 @@ public class Project extends AbstractEntity {
     private Contact projektLeiter;
 
     @ManyToOne
+    @Nullable
     private Contact projektleiterStellvertreter;
 
-    private Date projektLaufzeitVon = new Date();
-    private Date getProjektLaufzeitBis = new Date();
+    @Nullable
+    private LocalDate projektLaufzeitVon;
+    @Nullable
+    private LocalDate getProjektLaufzeitBis;
 
     @ManyToOne
     private Project uebergeordnetesProjekt;
@@ -136,7 +140,7 @@ public class Project extends AbstractEntity {
     @OneToMany(mappedBy = "uebergeordnetesProjekt")
     private final List<Project> untergeordneteProjekte = new LinkedList<>();
 
-    private boolean istAktiv;
+    private boolean istAktiv = true;
 
     public Contact getProjektLeiter() {
         return projektLeiter;
@@ -154,19 +158,19 @@ public class Project extends AbstractEntity {
         this.projektleiterStellvertreter = projektleiterStellvertreter;
     }
 
-    public Date getProjektLaufzeitVon() {
+    public @Nullable LocalDate getProjektLaufzeitVon() {
         return projektLaufzeitVon;
     }
 
-    public void setProjektLaufzeitVon(Date projektLaufzeitVon) {
+    public void setProjektLaufzeitVon(LocalDate projektLaufzeitVon) {
         this.projektLaufzeitVon = projektLaufzeitVon;
     }
 
-    public Date getProjektLaufzeitBis() {
+    public @Nullable LocalDate getProjektLaufzeitBis() {
         return getProjektLaufzeitBis;
     }
 
-    public void setProjektLaufzeitBis(Date getProjektLaufzeitBis) {
+    public void setProjektLaufzeitBis(LocalDate getProjektLaufzeitBis) {
         this.getProjektLaufzeitBis = getProjektLaufzeitBis;
     }
 

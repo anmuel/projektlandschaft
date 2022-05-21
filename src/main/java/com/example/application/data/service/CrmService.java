@@ -30,7 +30,15 @@ public class CrmService {
         this.projectRepository = projectRepository;
     }
 
-    public List<Contact> findAllContacts(String stringFilter) {
+    /**
+     * Find all contacts according to the stringFilter.
+     *
+     * @param stringFilter if present (non-null or non-blank String), this will be applied to the firstName and lastName
+     *                     of the contacts
+     * @return all contacts
+     * @see ContactRepository#search(String)
+     */
+    public List<Contact> findAllContacts(@Nullable String stringFilter) {
         if (stringFilter == null || stringFilter.isEmpty()) {
             return contactRepository.findAll();
         } else {

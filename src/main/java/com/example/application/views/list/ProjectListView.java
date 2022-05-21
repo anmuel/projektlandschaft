@@ -8,7 +8,6 @@ import com.example.application.views.list.ProjectForm.SaveEvent;
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import java.util.Collections;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -29,7 +28,7 @@ public class ProjectListView extends AbstractListView<Project> {
 
     @Override
     protected void configureForm() {
-        form = new ProjectForm(Collections.emptyList(), Collections.emptyList());
+        form = new ProjectForm(crmService.findAllCompanies(), crmService.findAllContacts(null));
         form.setWidth("25em");
         form.addListener(ProjectForm.SaveEvent.class, this::saveProject);
         form.addListener(ProjectForm.DeleteEvent.class, this::deleteProject);
@@ -50,9 +49,12 @@ public class ProjectListView extends AbstractListView<Project> {
         grid.addClassNames("contact-grid");
         grid.setSizeFull();
         grid.setColumns("title", "description", "istAktiv");
-//        grid.addColumn(project -> project.getAuftragGeber().getName()).setHeader("Auftraggeber");
-//        grid.addColumn(project -> project.getProjektLaufzeitVon().toString()).setHeader("Projektlaufzeit Von");
-//        grid.addColumn(project -> project.getProjektLaufzeitBis().toString()).setHeader("Projektlaufzeit Bis");
+        grid.addColumn(project -> project.getAuftragGeber() != null ? project.getAuftragGeber().getName() : "")
+            .setHeader("Auftraggeber");
+        grid.addColumn(project -> project.getProjektLaufzeitVon() != null ? project.getProjektLaufzeitVon().toString()
+            : null).setHeader("Projektlaufzeit Von");
+        grid.addColumn(project -> project.getProjektLaufzeitBis() != null ? project.getProjektLaufzeitBis().toString()
+            : null).setHeader("Projektlaufzeit Bis");
         grid.getColumns().forEach(column -> column.setAutoWidth(true));
         grid.asSingleSelect().addValueChangeListener(event -> editValue(event.getValue()));
     }

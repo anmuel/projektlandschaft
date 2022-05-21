@@ -21,7 +21,7 @@ public abstract class AbstractListView<T extends AbstractEntity> extends Vertica
 
     private final Class<T> clazz;
 
-    public AbstractListView(CrmService service, Class<T> clazz) {
+    protected AbstractListView(CrmService service, Class<T> clazz) {
         super();
         this.crmService = service;
         this.clazz = clazz;

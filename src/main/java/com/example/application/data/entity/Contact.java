@@ -1,6 +1,7 @@
 package com.example.application.data.entity;
 
 import com.example.application.data.AbstractEntity;
+import com.example.application.views.list.Nameable;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.util.List;
 import javax.persistence.Entity;
@@ -13,7 +14,7 @@ import javax.validation.constraints.NotNull;
 import org.springframework.lang.Nullable;
 
 @Entity
-public class Contact extends AbstractEntity {
+public class Contact extends AbstractEntity implements Nameable {
 
     @NotEmpty
     private String firstName = "";
@@ -26,6 +27,11 @@ public class Contact extends AbstractEntity {
     @NotNull
     @JsonIgnoreProperties({"employees"})
     private Company company;
+
+    @Override
+    public String getName() {
+        return String.format("%s %s", this.getFirstName(), this.getLastName());
+    }
 
     @NotNull
     @ManyToOne
