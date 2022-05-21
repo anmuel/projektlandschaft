@@ -63,9 +63,9 @@ public abstract class AbstractForm<T> extends FormLayout {
 
     private void validateAndSave() {
         try {
-            binder.writeBean(value);
+            binder.writeBean(getValue());
             fireEvent(this.createSaveEvent());
-        } catch (ValidationException e) {
+        } catch (ValidationException | NullPointerException e) {
             e.printStackTrace();
             notificationService.showErrorNotification(e.getLocalizedMessage());
         }

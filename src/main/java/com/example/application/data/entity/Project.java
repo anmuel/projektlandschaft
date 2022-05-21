@@ -12,6 +12,8 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 
 @Entity()
@@ -124,6 +126,7 @@ public class Project extends AbstractEntity {
 
     private String kostenTraeger;
     @ManyToOne
+    @NotNull
     private Contact projektLeiter;
 
     @ManyToOne
@@ -136,6 +139,7 @@ public class Project extends AbstractEntity {
     private LocalDate getProjektLaufzeitBis;
 
     @ManyToOne
+    @Nullable
     private Project uebergeordnetesProjekt;
 
     @OneToMany(mappedBy = "uebergeordnetesProjekt")
@@ -143,11 +147,11 @@ public class Project extends AbstractEntity {
 
     private boolean istAktiv = true;
 
-    public Contact getProjektLeiter() {
+    public @NonNull Contact getProjektLeiter() {
         return projektLeiter;
     }
 
-    public void setProjektLeiter(Contact projektLeiter) {
+    public void setProjektLeiter(@NonNull Contact projektLeiter) {
         this.projektLeiter = projektLeiter;
     }
 
@@ -175,11 +179,11 @@ public class Project extends AbstractEntity {
         this.getProjektLaufzeitBis = getProjektLaufzeitBis;
     }
 
-    public Project getUebergeordnetesProjekt() {
+    public @Nullable Project getUebergeordnetesProjekt() {
         return uebergeordnetesProjekt;
     }
 
-    public void setUebergeordnetesProjekt(Project uebergeordnetesProjekt) {
+    public void setUebergeordnetesProjekt(@Nullable Project uebergeordnetesProjekt) {
         this.uebergeordnetesProjekt = uebergeordnetesProjekt;
     }
 
@@ -191,16 +195,16 @@ public class Project extends AbstractEntity {
         this.istAktiv = istAktiv;
     }
 
-    public List<Project> getAbhaengigeProjekte() {
-        return abhaengigeProjekte;
+    public List<Project> getAbhängigeProjekte() {
+        return abhängigeProjekte;
     }
 
-    public void setAbhaengigeProjekte(List<Project> abhaengigeProjekte) {
-        this.abhaengigeProjekte = abhaengigeProjekte;
+    public void setAbhängigeProjekte(List<Project> abhängigeProjekte) {
+        this.abhängigeProjekte = abhängigeProjekte;
     }
 
     @ManyToMany
-    private List<Project> abhaengigeProjekte = new LinkedList<>();
+    private List<Project> abhängigeProjekte = new LinkedList<>();
 
     @Override
     public boolean equals(Object o) {
@@ -226,7 +230,7 @@ public class Project extends AbstractEntity {
             projektLaufzeitVon, project.projektLaufzeitVon) && Objects.equals(getProjektLaufzeitBis,
             project.getProjektLaufzeitBis) && Objects.equals(uebergeordnetesProjekt,
             project.uebergeordnetesProjekt) && Objects.equals(untergeordneteProjekte,
-            project.untergeordneteProjekte) && Objects.equals(abhaengigeProjekte, project.abhaengigeProjekte);
+            project.untergeordneteProjekte) && Objects.equals(abhängigeProjekte, project.abhängigeProjekte);
     }
 
     @Override
@@ -235,6 +239,6 @@ public class Project extends AbstractEntity {
             fachlichesThemengebiet, fachlicheKompetenz, methodischeKompetenz, technologischeKompetenz, kostenTraeger,
             projektLeiter, projektleiterStellvertreter, projektLaufzeitVon, getProjektLaufzeitBis,
             uebergeordnetesProjekt,
-            untergeordneteProjekte, istAktiv, abhaengigeProjekte);
+            untergeordneteProjekte, istAktiv, abhängigeProjekte);
     }
 }

@@ -16,7 +16,6 @@ import com.vaadin.flow.component.combobox.ComboBox.ItemFilter;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.data.binder.Setter;
-import com.vaadin.flow.data.selection.MultiSelectionListener;
 import com.vaadin.flow.function.ValueProvider;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
@@ -39,14 +38,14 @@ public class ProjectForm extends AbstractForm<Project> {
 
     ComboBox<Company> auftragGeber = new ComboBox<>("Auftraggeber");
 
-    ComboBox<Contact> projectLeiter = new ComboBox<>("Projektleiter");
-    ComboBox<Contact> stlvProjektleiter = new ComboBox<>("Stlv. Projektleiter");
+    private final ComboBox<Contact> projectLeiter = new ComboBox<>("Projektleiter");
+    private final ComboBox<Contact> stlvProjektleiter = new ComboBox<>("Stlv. Projektleiter");
 
-    Checkbox istAktiv = new Checkbox("Aktiv");
+    private final Checkbox istAktiv = new Checkbox("Aktiv");
 
-    TextField strategischesProjektziel = new TextField("Strategisches Projektziel");
-    TextField fachlichesThemengebiet = new TextField("Fachliches Themengebiet");
-    CheckboxGroup<MethodischeKompetenz> methodischeKompetenz = new CheckboxGroup<>();
+    private final TextField strategischesProjektziel = new TextField("Strategisches Projektziel");
+    private final TextField fachlichesThemengebiet = new TextField("Fachliches Themengebiet");
+    private final CheckboxGroup<MethodischeKompetenz> methodischeKompetenz = new CheckboxGroup<>();
 
     ComboBox<Project> uebergeordnetesProject = new ComboBox<>("Übergeordnetes Projekt");
 
@@ -96,7 +95,7 @@ public class ProjectForm extends AbstractForm<Project> {
 
     @Override
     protected void populateItems() {
-        this.title.setRequired(true);
+        title.setRequired(true);
 
         auftragGeber.setItems(this.auftrageberItems);
         auftragGeber.setItemLabelGenerator((ItemLabelGenerator<Company>) Company::getName);
@@ -106,19 +105,18 @@ public class ProjectForm extends AbstractForm<Project> {
         projectLeiter.setRequired(true);
 
         stlvProjektleiter.setItems((ItemFilter<Contact>) (item, filterText) -> !item.equals(projectLeiter.getValue()),
-            this.contacts);
+            contacts);
         stlvProjektleiter.setItemLabelGenerator((ItemLabelGenerator<Contact>) Contact::getName);
 
         methodischeKompetenz.setItems(methodischeKompetenzItems);
         methodischeKompetenz.setLabel("Methodische Kompetenz(en)");
         methodischeKompetenz.setItemLabelGenerator(
             (ItemLabelGenerator<MethodischeKompetenz>) MethodischeKompetenz::getName);
-        methodischeKompetenz.addSelectionListener(
-            (MultiSelectionListener<CheckboxGroup<MethodischeKompetenz>, MethodischeKompetenz>) event -> getValue().setMethodischeKompetenz(
-                new LinkedList<>(event.getValue())));
         methodischeKompetenz.addThemeVariants(CheckboxGroupVariant.LUMO_HELPER_ABOVE_FIELD);
 
-        uebergeordnetesProject.setItems((ItemFilter<Project>) (project, filterText) -> !project.equals(getValue()), projects);
+        uebergeordnetesProject.setItems((ItemFilter<Project>) (item, filterText) -> {
+            return !item.equals(getValue());
+        }, projects);
         uebergeordnetesProject.setItemLabelGenerator((ItemLabelGenerator<Project>) Project::getTitle);
     }
 
