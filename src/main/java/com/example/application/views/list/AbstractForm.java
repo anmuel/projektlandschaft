@@ -59,8 +59,7 @@ public abstract class AbstractForm<T> extends FormLayout {
 
     abstract void onDeleteValue(ClickEvent<Button> event);
 
-    void onClose(ClickEvent<Button> event) {
-    }
+    abstract void onClose(ClickEvent<Button> event);
 
     private void validateAndSave() {
         try {

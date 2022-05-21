@@ -2,10 +2,14 @@ package com.example.application.data.service;
 
 import com.example.application.data.entity.Company;
 import com.example.application.data.entity.Contact;
+import com.example.application.data.entity.FachlicheKompetenz;
+import com.example.application.data.entity.MethodischeKompetenz;
 import com.example.application.data.entity.Project;
 import com.example.application.data.entity.Status;
 import com.example.application.data.repository.CompanyRepository;
 import com.example.application.data.repository.ContactRepository;
+import com.example.application.data.repository.FachlicheKompetenzRepository;
+import com.example.application.data.repository.MethodischeKompetenzRepository;
 import com.example.application.data.repository.ProjectRepository;
 import com.example.application.data.repository.StatusRepository;
 import java.util.List;
@@ -19,15 +23,21 @@ public class CrmService {
     private final CompanyRepository companyRepository;
     private final StatusRepository statusRepository;
     private final ProjectRepository projectRepository;
+    private final FachlicheKompetenzRepository fachlicheKompetenzRepository;
+    private final MethodischeKompetenzRepository methodischeKompetenzRepository;
 
     public CrmService(ContactRepository contactRepository,
         CompanyRepository companyRepository,
         StatusRepository statusRepository,
-        ProjectRepository projectRepository) {
+        ProjectRepository projectRepository,
+        FachlicheKompetenzRepository fachlicheKompetenzRepository,
+        MethodischeKompetenzRepository methodischeKompetenzRepository) {
         this.contactRepository = contactRepository;
         this.companyRepository = companyRepository;
         this.statusRepository = statusRepository;
         this.projectRepository = projectRepository;
+        this.fachlicheKompetenzRepository = fachlicheKompetenzRepository;
+        this.methodischeKompetenzRepository = methodischeKompetenzRepository;
     }
 
     /**
@@ -84,5 +94,21 @@ public class CrmService {
 
     public void deleteProject(Project project) {
         this.projectRepository.delete(project);
+    }
+
+    public List<FachlicheKompetenz> findFachlicheKompetenzen(@Nullable String searchTerm) {
+        if (searchTerm != null && !searchTerm.isEmpty()) {
+            return fachlicheKompetenzRepository.findAllByName(searchTerm);
+        } else {
+            return fachlicheKompetenzRepository.findAll();
+        }
+    }
+
+    public List<MethodischeKompetenz> findMethodischeKompetenzen(@Nullable String searchTerm) {
+        if (searchTerm != null && !searchTerm.isEmpty()) {
+            return methodischeKompetenzRepository.findAllByName(searchTerm);
+        } else {
+            return methodischeKompetenzRepository.findAll();
+        }
     }
 }

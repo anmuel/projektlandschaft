@@ -115,10 +115,10 @@ public class Project extends AbstractEntity {
     @ManyToMany(mappedBy = "projects")
     private List<FachlicheKompetenz> fachlicheKompetenz = new LinkedList<>();
 
-    @ManyToMany(mappedBy = "projects", fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "projects", fetch = FetchType.EAGER)
     private List<MethodischeKompetenz> methodischeKompetenz = new LinkedList<>();
 
-    @ManyToMany(mappedBy = "projects", fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "projects")
     private List<TechnologischeKompetenz> technologischeKompetenz = new LinkedList<>();
 
     private String kostenTraeger;

@@ -2,10 +2,14 @@ package com.example.application.data.generator;
 
 import com.example.application.data.entity.Company;
 import com.example.application.data.entity.Contact;
+import com.example.application.data.entity.FachlicheKompetenz;
+import com.example.application.data.entity.MethodischeKompetenz;
 import com.example.application.data.entity.Project;
 import com.example.application.data.entity.Status;
 import com.example.application.data.repository.CompanyRepository;
 import com.example.application.data.repository.ContactRepository;
+import com.example.application.data.repository.FachlicheKompetenzRepository;
+import com.example.application.data.repository.MethodischeKompetenzRepository;
 import com.example.application.data.repository.ProjectRepository;
 import com.example.application.data.repository.StatusRepository;
 import com.vaadin.exampledata.DataType;
@@ -26,7 +30,9 @@ public class DataGenerator {
 
     @Bean
     public CommandLineRunner loadData(ContactRepository contactRepository, CompanyRepository companyRepository,
-        StatusRepository statusRepository, ProjectRepository projectRepository) {
+        StatusRepository statusRepository, ProjectRepository projectRepository,
+        FachlicheKompetenzRepository fachlicheKompetenzRepository,
+        MethodischeKompetenzRepository methodischeKompetenzRepository) {
 
         return args -> {
             Logger logger = LoggerFactory.getLogger(getClass());
@@ -60,6 +66,18 @@ public class DataGenerator {
             }).collect(Collectors.toList());
 
             contactRepository.saveAll(contacts);
+
+            ExampleDataGenerator<FachlicheKompetenz> fachlicheKompetenzGenerator = new ExampleDataGenerator<>(
+                FachlicheKompetenz.class, LocalDateTime.now());
+            fachlicheKompetenzGenerator.setData(FachlicheKompetenz::setName, DataType.OCCUPATION);
+            List<FachlicheKompetenz> fachlicheKompetenzen = fachlicheKompetenzRepository.saveAll(
+                fachlicheKompetenzGenerator.create(5, seed));
+
+            ExampleDataGenerator<MethodischeKompetenz> methodischeKompetenzGenerator = new ExampleDataGenerator<>(
+                MethodischeKompetenz.class, LocalDateTime.now());
+            methodischeKompetenzGenerator.setData(MethodischeKompetenz::setName, DataType.OCCUPATION);
+            List<MethodischeKompetenz> methodischeKompetenzen = methodischeKompetenzRepository.saveAll(
+                methodischeKompetenzGenerator.create(5, seed));
 
             logger.info("... generating 10 Project entities ...");
             ExampleDataGenerator<Project> projectGenerator = new ExampleDataGenerator<>(Project.class,

@@ -3,6 +3,7 @@ package com.example.application.data.entity;
 import com.example.application.data.AbstractEntity;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
@@ -21,19 +22,39 @@ public class MethodischeKompetenz extends AbstractEntity {
             name = "project_id", referencedColumnName = "id"))
     private List<Project> projects = new LinkedList<>();
 
-    List<Project> getProjects() {
+    public List<Project> getProjects() {
         return projects;
     }
 
-    void setProjects(List<Project> projects) {
+    public void setProjects(List<Project> projects) {
         this.projects = projects;
     }
 
-    String getName() {
+    public String getName() {
         return name;
     }
 
-    void setName(String name) {
+    public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        if (!super.equals(o)) {
+            return false;
+        }
+        MethodischeKompetenz that = (MethodischeKompetenz) o;
+        return name.equals(that.name) && projects.equals(that.projects);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), name, projects);
     }
 }

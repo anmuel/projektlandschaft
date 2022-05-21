@@ -20,6 +20,10 @@ public class NotificationService {
         this.showNotification(text, NotificationVariant.LUMO_ERROR);
     }
 
+    public void showSuccessNotification(String text) {
+        this.showNotification(text, NotificationVariant.LUMO_SUCCESS);
+    }
+
     public void showNotification(String text, NotificationVariant notificationVariant) {
         // When creating a notification using the constructor,
         // the duration is 0-sec by default which means that

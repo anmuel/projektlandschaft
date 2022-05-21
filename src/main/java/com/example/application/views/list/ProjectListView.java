@@ -8,6 +8,8 @@ import com.example.application.views.list.ProjectForm.DeleteEvent;
 import com.example.application.views.list.ProjectForm.SaveEvent;
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.icon.Icon;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.function.SerializableBiConsumer;
@@ -33,7 +35,10 @@ public class ProjectListView extends AbstractListView<Project> {
 
     @Override
     protected void configureForm() {
-        form = new ProjectForm(notificationService, crmService.findAllCompanies(), crmService.findAllContacts(null));
+        form = new ProjectForm(notificationService,
+            crmService.findAllCompanies(),
+            crmService.findAllContacts(null),
+            crmService.findMethodischeKompetenzen(null));
         form.setWidth("25em");
         form.addListener(ProjectForm.SaveEvent.class, this::saveProject);
         form.addListener(ProjectForm.DeleteEvent.class, this::deleteProject);
@@ -59,13 +64,23 @@ public class ProjectListView extends AbstractListView<Project> {
         grid.setSizeFull();
         grid.setColumns("title", "description");
         grid.addColumn(createStatusComponentRenderer()).setHeader("Status")
-            .setAutoWidth(true);
+            .setAutoWidth(true).setSortable(true).setComparator((p1, p2) -> {
+                if (p1.istAktiv() && p2.istAktiv()) {
+                    return 0;
+                } else if (p1.istAktiv() && !p2.istAktiv()) {
+                    return 1;
+                } else if (!p1.istAktiv() && p2.istAktiv()) {
+                    return -1;
+                } else {
+                    return 0;
+                }
+            });
         grid.addColumn(project -> project.getAuftragGeber() != null ? project.getAuftragGeber().getName() : "")
-            .setHeader("Auftraggeber");
+            .setHeader("Auftraggeber").setSortable(true);
         grid.addColumn(project -> project.getProjektLaufzeitVon() != null ? project.getProjektLaufzeitVon().toString()
-            : null).setHeader("Projektlaufzeit Von");
+            : null).setHeader("Projektlaufzeit Von").setSortable(true);
         grid.addColumn(project -> project.getProjektLaufzeitBis() != null ? project.getProjektLaufzeitBis().toString()
-            : null).setHeader("Projektlaufzeit Bis");
+            : null).setHeader("Projektlaufzeit Bis").setSortable(true);
         grid.getColumns().forEach(column -> column.setAutoWidth(true));
         grid.asSingleSelect().addValueChangeListener(event -> editValue(event.getValue()));
     }
@@ -74,7 +89,16 @@ public class ProjectListView extends AbstractListView<Project> {
         boolean isAvailable = project.istAktiv();
         String theme = String.format("badge %s", isAvailable ? "success" : "error");
         span.getElement().setAttribute("theme", theme);
-        span.setText(project.istAktiv() ? "aktiv" : "inaktiv");
+        VaadinIcon vaadinIcon = isAvailable ? VaadinIcon.CHECK : VaadinIcon.CLOSE_SMALL;
+        Icon icon = vaadinIcon.create();
+        icon.getElement().getThemeList().add(theme);
+        icon.getStyle().set("padding", "var(--lumo-space-xs");
+        // Accessible label
+        String label = isAvailable ? "aktiv" : "inaktiv";
+        icon.getElement().setAttribute("aria-label", label);
+        // Tooltip
+        icon.getElement().setAttribute("title", label);
+        span.add(icon);
     };
 
     private static ComponentRenderer<Span, Project> createStatusComponentRenderer() {

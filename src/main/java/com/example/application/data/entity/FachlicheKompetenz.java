@@ -3,6 +3,7 @@ package com.example.application.data.entity;
 import com.example.application.data.AbstractEntity;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
@@ -34,5 +35,25 @@ public class FachlicheKompetenz extends AbstractEntity {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        if (!super.equals(o)) {
+            return false;
+        }
+        FachlicheKompetenz that = (FachlicheKompetenz) o;
+        return projects.equals(that.projects) && name.equals(that.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), projects, name);
     }
 }

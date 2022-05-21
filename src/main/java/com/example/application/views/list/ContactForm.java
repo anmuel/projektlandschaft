@@ -62,6 +62,11 @@ public class ContactForm extends AbstractForm<Contact> {
     }
 
     @Override
+    void onClose(ClickEvent<Button> event) {
+        fireEvent(new CloseEvent(this));
+    }
+
+    @Override
     protected AbstractForm.SaveEvent<Contact> createSaveEvent() {
         return new SaveEvent(this, getValue());
     }
