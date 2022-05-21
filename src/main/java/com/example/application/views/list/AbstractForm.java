@@ -26,7 +26,7 @@ public abstract class AbstractForm<T> extends FormLayout {
     Binder<T> binder;
 
     private transient T value;
-    private transient Class<T> clazz;
+    private final transient Class<T> clazz;
 
     protected transient NotificationService notificationService;
 

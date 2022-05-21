@@ -7,6 +7,7 @@ import com.example.application.data.service.NotificationService;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.ItemLabelGenerator;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.textfield.TextField;
 import java.util.List;
@@ -22,6 +23,8 @@ public class ProjectForm extends AbstractForm<Project> {
     ComboBox<Contact> projectLeiter = new ComboBox<>("Projektleiter");
     ComboBox<Contact> stlvProjektleiter = new ComboBox<>("Stlv. Projektleiter");
 
+    Checkbox istAktiv = new Checkbox("Aktiv");
+
     private final transient List<Company> auftrageberItems;
     private final transient List<Contact> contacts;
 
@@ -34,13 +37,13 @@ public class ProjectForm extends AbstractForm<Project> {
 
         populateItems();
 
-        add(title, description, auftragGeber, projectLeiter, stlvProjektleiter, createButtonsLayout());
+        add(title, istAktiv, description, auftragGeber, projectLeiter, stlvProjektleiter, createButtonsLayout());
         initBinder();
     }
 
     @Override
     void onDeleteValue(ClickEvent<Button> event) {
-        fireEvent(new DeleteEvent(this, getValue()));
+        notificationService.showConfirmationDialog("Are you sure?", () -> fireEvent(new DeleteEvent(this, getValue())));
     }
 
     @Override

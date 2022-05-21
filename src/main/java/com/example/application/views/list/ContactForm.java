@@ -20,8 +20,8 @@ public class ContactForm extends AbstractForm<Contact> {
     ComboBox<Company> company = new ComboBox<>("Company");
 
 
-    private List<Company> companies;
-    private List<Status> statuses;
+    private final transient List<Company> companies;
+    private final transient List<Status> statuses;
 
     public ContactForm(NotificationService notificationService, List<Company> companies, List<Status> statuses) {
         super(Contact.class, notificationService);
@@ -58,7 +58,7 @@ public class ContactForm extends AbstractForm<Contact> {
 
     @Override
     void onDeleteValue(ClickEvent<Button> event) {
-        fireEvent(new DeleteEvent(this, getValue()));
+        notificationService.showConfirmationDialog("Are you sure?", () -> fireEvent(new DeleteEvent(this, getValue())));
     }
 
     @Override

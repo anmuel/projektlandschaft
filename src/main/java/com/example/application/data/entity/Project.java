@@ -182,7 +182,7 @@ public class Project extends AbstractEntity {
         this.uebergeordnetesProjekt = uebergeordnetesProjekt;
     }
 
-    public boolean isIstAktiv() {
+    public boolean istAktiv() {
         return istAktiv;
     }
 
