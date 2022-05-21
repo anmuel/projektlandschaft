@@ -1,9 +1,10 @@
 package com.example.application.data.entity;
 
 import com.example.application.data.AbstractEntity;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
@@ -12,18 +13,16 @@ import javax.persistence.ManyToMany;
 @Entity
 public class FachlicheKompetenz extends AbstractEntity {
 
-    @ManyToMany()
-    @JoinTable(name = "projekte_fachliche_kompetenzen",
-        joinColumns = {@JoinColumn(name = "competence_id",
-            referencedColumnName = "id")
-        },
-        inverseJoinColumns = {
-            @JoinColumn(name = "project_id",
-                referencedColumnName = "id")})
-    private final List<Project> projects = new LinkedList<>();
-
-
     private String name;
+
+    @ManyToMany(cascade = CascadeType.MERGE)
+    @JoinTable(name = "fachliche_kompetenz_projects",
+        joinColumns = @JoinColumn(name = "fachliche_kompetenz_id", referencedColumnName = "id"))
+    private List<Project> projects = new ArrayList<>();
+
+    public void setProjects(List<Project> projects) {
+        this.projects = projects;
+    }
 
     public List<Project> getProjects() {
         return projects;
