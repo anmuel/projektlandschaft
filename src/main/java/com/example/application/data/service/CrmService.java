@@ -66,7 +66,7 @@ public class CrmService {
         if (filterTextValue == null || filterTextValue.isEmpty()) {
             return projectRepository.findAll();
         } else {
-            return projectRepository.findByTitleOrDescriptionLike(filterTextValue);
+            return projectRepository.search(filterTextValue);
         }
     }
 }

@@ -5,10 +5,14 @@ import com.example.application.data.AbstractEntity;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotBlank;
 
+@Entity()
 public class Project extends AbstractEntity {
 
     @NotBlank
@@ -62,28 +66,28 @@ public class Project extends AbstractEntity {
         this.fachlichesThemengebiet = fachlichesThemengebiet;
     }
 
-    public List<Competence> getFachlicheKompetenz() {
+    public List<FachlicheKompetenz> getFachlicheKompetenz() {
         return fachlicheKompetenz;
     }
 
-    public void setFachlicheKompetenz(List<Competence> fachlicheKompetenz) {
+    public void setFachlicheKompetenz(List<FachlicheKompetenz> fachlicheKompetenz) {
         this.fachlicheKompetenz = fachlicheKompetenz;
     }
 
-    public List<Competence> getMethodischeKompetenz() {
+    public List<MethodischeKompetenz> getMethodischeKompetenz() {
         return methodischeKompetenz;
     }
 
-    public void setMethodischeKompetenz(List<Competence> methodischeKompetenz) {
+    public void setMethodischeKompetenz(List<MethodischeKompetenz> methodischeKompetenz) {
         this.methodischeKompetenz = methodischeKompetenz;
     }
 
-    public List<Competence> getTechnologischeKompetenz() {
+    public List<TechnologischeKompetenz> getTechnologischeKompetenz() {
         return technologischeKompetenz;
     }
 
     public void setTechnologischeKompetenz(
-        List<Competence> technologischeKompetenz) {
+        List<TechnologischeKompetenz> technologischeKompetenz) {
         this.technologischeKompetenz = technologischeKompetenz;
     }
 
@@ -95,38 +99,42 @@ public class Project extends AbstractEntity {
         this.kostenTraeger = kostenTraeger;
     }
 
-    @NotBlank
     private String description;
 
-    @NotBlank
+    @ManyToOne()
     private Company auftragGeber;
 
+    @ManyToOne
     private Company auftragNehmer;
 
     private String strategischesProjektziel;
 
     private String fachlichesThemengebiet;
 
-    @ManyToMany
-    private List<Competence> fachlicheKompetenz = new LinkedList<>();
+    @ManyToMany(mappedBy="projects")
+    private List<FachlicheKompetenz> fachlicheKompetenz = new LinkedList<>();
 
-    @ManyToMany
-    private List<Competence> methodischeKompetenz = new LinkedList<>();
+    @ManyToMany(mappedBy="projects", fetch = FetchType.LAZY)
+    private List<MethodischeKompetenz> methodischeKompetenz = new LinkedList<>();
 
-    @ManyToMany
-    private List<Competence> technologischeKompetenz = new LinkedList<>();
+    @ManyToMany(mappedBy = "projects", fetch = FetchType.LAZY)
+    private List<TechnologischeKompetenz> technologischeKompetenz = new LinkedList<>();
 
     private String kostenTraeger;
-    @OneToMany
+    @ManyToOne
     private Contact projektLeiter;
-    @OneToMany
+
+    @ManyToOne
     private Contact projektleiterStellvertreter;
 
     private Date projektLaufzeitVon = new Date();
     private Date getProjektLaufzeitBis = new Date();
 
-    @OneToMany
+    @ManyToOne
     private Project uebergeordnetesProjekt;
+
+    @OneToMany(mappedBy = "uebergeordnetesProjekt")
+    private final List<Project> untergeordneteProjekte = new LinkedList<>();
 
     private boolean istAktiv;
 

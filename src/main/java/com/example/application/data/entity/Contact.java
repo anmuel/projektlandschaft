@@ -2,12 +2,15 @@ package com.example.application.data.entity;
 
 import com.example.application.data.AbstractEntity;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import org.springframework.lang.Nullable;
 
 @Entity
 public class Contact extends AbstractEntity {
@@ -31,6 +34,13 @@ public class Contact extends AbstractEntity {
     @Email
     @NotEmpty
     private String email = "";
+
+    @OneToMany(mappedBy = "projektLeiter")
+    @Nullable
+    List<Project> projekteInLeitung;
+
+    @OneToMany(mappedBy = "projektleiterStellvertreter")
+    List<Project> projekteInLeitungStellvertreter;
 
     @Override
     public String toString() {

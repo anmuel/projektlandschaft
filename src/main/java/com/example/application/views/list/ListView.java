@@ -18,8 +18,6 @@ import org.springframework.context.annotation.Scope;
 @Scope("prototype")
 public class ListView extends AbstractListView<Contact> {
 
-    ContactForm form;
-
     public ListView(CrmService crmService) {
         super(crmService, Contact.class);
     }

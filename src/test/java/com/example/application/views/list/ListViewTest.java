@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-@RunWith(SpringRunner.class) 
+@RunWith(SpringRunner.class)
 @SpringBootTest
 public class ListViewTest {
 
@@ -22,7 +22,7 @@ public class ListViewTest {
         Grid<Contact> grid = listView.grid;
         Contact firstContact = getFirstItem(grid);
 
-        ContactForm form = listView.form;
+        ContactForm form = (ContactForm)listView.form;
 
         Assert.assertFalse(form.isVisible());
         grid.asSingleSelect().setValue(firstContact);
@@ -31,6 +31,6 @@ public class ListViewTest {
     }
 
     private Contact getFirstItem(Grid<Contact> grid) {
-        return( (ListDataProvider<Contact>) grid.getDataProvider()).getItems().iterator().next();
+        return ((ListDataProvider<Contact>) grid.getDataProvider()).getItems().iterator().next();
     }
 }

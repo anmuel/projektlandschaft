@@ -19,6 +19,12 @@ public class Company extends AbstractEntity {
     @OneToMany(mappedBy = "company")
     private List<Contact> employees = new LinkedList<>();
 
+    @OneToMany(mappedBy = "auftragGeber")
+    private List<Project> auftragGeber;
+
+    @OneToMany(mappedBy="auftragNehmer")
+    private List<Project> auftragNehmer;
+
     public String getName() {
         return name;
     }
