@@ -12,6 +12,7 @@ import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.checkbox.CheckboxGroup;
 import com.vaadin.flow.component.checkbox.CheckboxGroupVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
+import com.vaadin.flow.component.combobox.ComboBox.ItemFilter;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.data.binder.Setter;
@@ -98,7 +99,8 @@ public class ProjectForm extends AbstractForm<Project> {
         projectLeiter.setItemLabelGenerator((ItemLabelGenerator<Contact>) Contact::getName);
         projectLeiter.setRequired(true);
 
-        stlvProjektleiter.setItems(this.contacts);
+        stlvProjektleiter.setItems((ItemFilter<Contact>) (item, filterText) -> !item.equals(projectLeiter.getValue()),
+            this.contacts);
         stlvProjektleiter.setItemLabelGenerator((ItemLabelGenerator<Contact>) Contact::getName);
 
         methodischeKompetenz.setItems(methodischeKompetenzItems);
