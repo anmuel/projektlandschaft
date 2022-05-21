@@ -1,5 +1,6 @@
 package com.example.application.views.list;
 
+import com.example.application.data.service.NotificationService;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
@@ -18,17 +19,20 @@ public abstract class AbstractForm<T> extends FormLayout {
 
     Button save = new Button("Save");
 
-    Button delete = new Button("delete");
+    Button delete = new Button("Delete");
 
-    Button close = new Button("close");
+    Button close = new Button("Close");
 
     Binder<T> binder;
 
     private transient T value;
     private transient Class<T> clazz;
 
-    protected AbstractForm(Class<T> clazz) {
+    protected transient NotificationService notificationService;
+
+    protected AbstractForm(Class<T> clazz, NotificationService notificationService) {
         super();
+        this.notificationService = notificationService;
         this.clazz = clazz;
         addClassName("contact-form");
     }
@@ -64,6 +68,7 @@ public abstract class AbstractForm<T> extends FormLayout {
             fireEvent(this.createSaveEvent());
         } catch (ValidationException e) {
             e.printStackTrace();
+            notificationService.showErrorNotification(e.getLocalizedMessage());
         }
     }
 

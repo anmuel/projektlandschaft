@@ -2,6 +2,7 @@ package com.example.application.views.list;
 
 import com.example.application.data.AbstractEntity;
 import com.example.application.data.service.CrmService;
+import com.example.application.data.service.NotificationService;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
@@ -14,6 +15,7 @@ import org.springframework.lang.Nullable;
 
 public abstract class AbstractListView<T extends AbstractEntity> extends VerticalLayout {
 
+    protected final NotificationService notificationService;
     protected transient CrmService crmService;
     protected Grid<T> grid;
     TextField filterText = new TextField();
@@ -21,9 +23,11 @@ public abstract class AbstractListView<T extends AbstractEntity> extends Vertica
 
     private final Class<T> clazz;
 
-    protected AbstractListView(CrmService service, Class<T> clazz) {
+    protected AbstractListView(CrmService service, NotificationService notificationService, Class<T> clazz) {
         super();
         this.crmService = service;
+        this.notificationService = notificationService;
+
         this.clazz = clazz;
         this.grid = new Grid<>(clazz);
 
@@ -81,6 +85,7 @@ public abstract class AbstractListView<T extends AbstractEntity> extends Vertica
         try {
             editValue((T) this.clazz.getConstructors()[0].newInstance());
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
+            this.notificationService.showErrorNotification(e.getLocalizedMessage());
             throw new RuntimeException(e);
         }
     }

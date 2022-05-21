@@ -3,6 +3,7 @@ package com.example.application.views.list;
 import com.example.application.data.entity.Company;
 import com.example.application.data.entity.Contact;
 import com.example.application.data.entity.Project;
+import com.example.application.data.service.NotificationService;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.ItemLabelGenerator;
 import com.vaadin.flow.component.button.Button;
@@ -18,17 +19,22 @@ public class ProjectForm extends AbstractForm<Project> {
 
     ComboBox<Company> auftragGeber = new ComboBox<>("Auftraggeber");
 
+    ComboBox<Contact> projectLeiter = new ComboBox<>("Projektleiter");
+    ComboBox<Contact> stlvProjektleiter = new ComboBox<>("Stlv. Projektleiter");
+
     private final transient List<Company> auftrageberItems;
+    private final transient List<Contact> contacts;
 
 
-    public ProjectForm(List<Company> companies, List<Contact> contacts) {
-        super(Project.class);
+    public ProjectForm(NotificationService notificationService, List<Company> companies, List<Contact> contacts) {
+        super(Project.class, notificationService);
 
         this.auftrageberItems = companies;
+        this.contacts = contacts;
 
         populateItems();
 
-        add(title, description, auftragGeber, createButtonsLayout());
+        add(title, description, auftragGeber, projectLeiter, stlvProjektleiter, createButtonsLayout());
         initBinder();
     }
 
@@ -44,8 +50,17 @@ public class ProjectForm extends AbstractForm<Project> {
 
     @Override
     protected void populateItems() {
+        this.title.setRequired(true);
+
         auftragGeber.setItems(this.auftrageberItems);
         auftragGeber.setItemLabelGenerator((ItemLabelGenerator<Company>) Company::getName);
+
+        projectLeiter.setItems(this.contacts);
+        projectLeiter.setItemLabelGenerator((ItemLabelGenerator<Contact>) Contact::getName);
+        projectLeiter.setRequired(true);
+
+        stlvProjektleiter.setItems(this.contacts);
+        stlvProjektleiter.setItemLabelGenerator((ItemLabelGenerator<Contact>) Contact::getName);
     }
 
     public static class SaveEvent extends AbstractForm.SaveEvent<Project> {

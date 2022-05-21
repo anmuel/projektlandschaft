@@ -3,6 +3,7 @@ package com.example.application.views.list;
 import com.example.application.data.entity.Company;
 import com.example.application.data.entity.Contact;
 import com.example.application.data.entity.Status;
+import com.example.application.data.service.NotificationService;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
@@ -21,8 +22,9 @@ public class ContactForm extends AbstractForm<Contact> {
 
     private List<Company> companies;
     private List<Status> statuses;
-    public ContactForm(List<Company> companies, List<Status> statuses) {
-        super(Contact.class);
+
+    public ContactForm(NotificationService notificationService, List<Company> companies, List<Status> statuses) {
+        super(Contact.class, notificationService);
 
         this.companies = companies;
         this.statuses = statuses;

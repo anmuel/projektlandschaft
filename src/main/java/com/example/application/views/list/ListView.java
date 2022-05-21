@@ -2,6 +2,7 @@ package com.example.application.views.list;
 
 import com.example.application.data.entity.Contact;
 import com.example.application.data.service.CrmService;
+import com.example.application.data.service.NotificationService;
 import com.example.application.views.MainLayout;
 import com.example.application.views.list.ContactForm.DeleteEvent;
 import com.example.application.views.list.ContactForm.SaveEvent;
@@ -18,8 +19,8 @@ import org.springframework.context.annotation.Scope;
 @Scope("prototype")
 public class ListView extends AbstractListView<Contact> {
 
-    public ListView(CrmService crmService) {
-        super(crmService, Contact.class);
+    public ListView(CrmService crmService, NotificationService notificationService) {
+        super(crmService, notificationService, Contact.class);
     }
 
     protected void updateList() {
@@ -27,7 +28,7 @@ public class ListView extends AbstractListView<Contact> {
     }
 
     protected void configureForm() {
-        form = new ContactForm(Collections.emptyList(), Collections.emptyList());
+        form = new ContactForm(notificationService, Collections.emptyList(), Collections.emptyList());
         form.setWidth("25em");
         form.addListener(ContactForm.SaveEvent.class, this::saveContact);
         form.addListener(ContactForm.DeleteEvent.class, this::deleteContact);

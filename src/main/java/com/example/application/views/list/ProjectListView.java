@@ -2,6 +2,7 @@ package com.example.application.views.list;
 
 import com.example.application.data.entity.Project;
 import com.example.application.data.service.CrmService;
+import com.example.application.data.service.NotificationService;
 import com.example.application.views.MainLayout;
 import com.example.application.views.list.ProjectForm.DeleteEvent;
 import com.example.application.views.list.ProjectForm.SaveEvent;
@@ -17,8 +18,8 @@ import org.springframework.stereotype.Component;
 @Scope("prototype")
 public class ProjectListView extends AbstractListView<Project> {
 
-    public ProjectListView(CrmService crmService) {
-        super(crmService, Project.class);
+    public ProjectListView(CrmService crmService, NotificationService notificationService) {
+        super(crmService, notificationService, Project.class);
     }
 
     @Override
@@ -28,7 +29,7 @@ public class ProjectListView extends AbstractListView<Project> {
 
     @Override
     protected void configureForm() {
-        form = new ProjectForm(crmService.findAllCompanies(), crmService.findAllContacts(null));
+        form = new ProjectForm(notificationService, crmService.findAllCompanies(), crmService.findAllContacts(null));
         form.setWidth("25em");
         form.addListener(ProjectForm.SaveEvent.class, this::saveProject);
         form.addListener(ProjectForm.DeleteEvent.class, this::deleteProject);
